@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Từ lời giảng thành sách</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&display=swap">
+<style>
+/* Bố cục: một cột đọc, bảng và biểu đồ rộng hơn cột chữ. Màu lời giảng và màu sách dùng nhất quán khắp trang. */
+:root{
+  --bg:#f3f5f4;--panel:#ffffff;--fg:#1c2a2e;--muted:#5a6b70;--line:#d3dbda;
+  --talk:#b0641a;--talk-soft:#f6e8d6;--book:#1f6f78;--book-soft:#d9ecee;
+  --noise:#e2e6e5;
+  --display:"Source Serif 4",Georgia,serif;--body:"Be Vietnam Pro","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141c1f;--panel:#1c262a;--fg:#e6edec;--muted:#9fb0b3;--line:#33424a;
+  --talk:#e9a65c;--talk-soft:#3b2c1b;--book:#62bfca;--book-soft:#173439;--noise:#2a363b;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141c1f;--panel:#1c262a;--fg:#e6edec;--muted:#9fb0b3;--line:#33424a;
+  --talk:#e9a65c;--talk-soft:#3b2c1b;--book:#62bfca;--book-soft:#173439;--noise:#2a363b;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:400 16px/1.68 var(--body)}
+main{max-width:980px;margin:0 auto;padding-block:48px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:52px}
+section{display:grid;gap:16px;min-width:0}
+h1,h2,h3{font-family:var(--display);line-height:1.22;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,5vw,3rem)}
+h2{font-size:clamp(1.4rem,3vw,1.8rem)}
+h3{font-size:1.1rem}
+p{margin:0;max-width:68ch}
+ul{margin:0;padding-left:1.2em;max-width:68ch;display:grid;gap:8px}
+.lead{font-size:1.1rem;max-width:64ch}
+.note{color:var(--muted);font-size:.875rem}
+.talk{color:var(--talk);font-weight:600}.book{color:var(--book);font-weight:600}
+.keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.key{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px;display:grid;gap:6px;align-content:start;min-width:0}
+.key strong{font-family:var(--display);font-size:1.08rem;line-height:1.3}
+.key span{font-size:.92rem}
+.chart{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px;display:grid;gap:4px;min-width:0}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.84rem;margin-bottom:8px}
+.swatch{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.tier{font-size:.76rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-top:14px;border-bottom:1px solid var(--line);padding-bottom:3px}
+.row{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:12px;align-items:center;padding-block:3px;font-size:.88rem}
+.track{position:relative;height:20px;background:linear-gradient(to right,var(--noise) 0 10%,transparent 10%);border-radius:2px}
+.link{position:absolute;top:9px;height:2px;background:var(--line)}
+.dot{position:absolute;top:4px;width:12px;height:12px;border-radius:50%;margin-left:-6px}
+.d-book{background:var(--book)}.d-talk{background:var(--talk)}
+.axis{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:12px;font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.axis div:last-child{display:flex;justify-content:space-between}
+.scroll{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:.88rem;font-variant-numeric:tabular-nums}
+th,td{padding:8px 11px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.76rem;font-weight:600;color:var(--muted)}
+tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;white-space:nowrap}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.pair>div{padding:12px 14px;border-radius:6px;font-size:.92rem;min-width:0}
+.pair .t{background:var(--talk-soft)}.pair .b{background:var(--book-soft)}
+.pair small{display:block;font-size:.72rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+.pair .t small{color:var(--talk)}.pair .b small{color:var(--book)}
+.ex{display:grid;gap:8px}
+details{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 14px}details .scroll{border:0;margin-top:8px}summary{cursor:pointer;font-weight:600}summary:focus-visible{outline:2px solid var(--book);outline-offset:2px}
+.diff{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:13px 15px;font-size:.92rem}
+del{color:var(--talk);text-decoration:line-through}
+ins{color:var(--book);text-decoration:none;font-weight:600}
+a{color:var(--book)}
+a:focus-visible{outline:2px solid var(--book);outline-offset:2px}
+@media (max-width:560px){.row,.axis{grid-template-columns:1fr;gap:2px}.axis div:first-child{display:none}}
+</style>
+</head>
+<body>
+<main>
+
+<header style="display:grid;gap:14px">
+  <h1>Từ lời giảng thành sách</h1>
+  <p class="lead">Đối chiếu 14 đầu sách và 10 bài Kinh Nikaya của TT. Thích Chân Quang với transcript của 100 bài giảng, để biết người biên tập đã giữ, cắt, thêm và đổi những gì. Bản cập nhật này so toàn bộ các bài của Tâm Lý Đạo Đức, Đạo Phật và Xã Hội, Tứ Thánh Đế.</p>
+</header>
+
+<section>
+  <h2>Kết luận chính</h2>
+  <p>Không có một cách biên tập chung. Các sách trải từ bản gần như chép nguyên lời đến bản gần như viết mới. Riêng phần lập luận thì được giữ rất ổn định, và thay đổi tập trung ở giọng nói, sự hiện diện của người giảng và hình thức trình bày.</p>
+  <div class="keys">
+    <div class="key"><strong>Ba mức can thiệp rất khác nhau</strong><span>Tỷ lệ chữ trong sách truy được về đúng lời giảng đi từ 93% (Hiểu Về Bản Ngã) xuống 21% (Khoa Học Về Thiền Định).</span></div>
+    <div class="key"><strong>Ý ở lại, câu chữ thay đổi</strong><span>Ở Tứ Niệm Xứ chỉ khoảng 41% chữ truy được về lời giảng, nhưng gần như mọi đoạn sách vẫn khớp về ý và đi đúng thứ tự giảng.</span></div>
+    <div class="key"><strong>Người giảng lùi khỏi trang sách</strong><span>Ở nhóm biên tập sâu, đối đáp với đại chúng chỉ còn 4% và chuyện tự kể còn 3%, trong khi mức giữ chung là 20%.</span></div>
+    <div class="key"><strong>Không thấy dấu hiệu làm nhẹ giáo lý</strong><span>Những ý gai góc như cõi Tịnh Độ là cõi tạm, hay Phật cao hơn chư Tổ, vẫn còn trong sách. Chỉ một vài chi tiết cụ thể bị lược.</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>Mức độ giữ nguyên lời giảng của từng sách</h2>
+  <p>Mỗi hàng có hai số: <span class="book">bao nhiêu phần trăm chữ của sách</span> tìm thấy trong lời giảng, và <span class="talk">bao nhiêu phần trăm lời giảng</span> còn lại trong sách. Hai chấm càng lệch sang phải thì sách càng sát lời giảng.</p>
+  <div class="chart" role="img" aria-label="Biểu đồ tỷ lệ chữ trong sách truy được về lời giảng và tỷ lệ lời giảng được giữ, theo từng sách">
+    <div class="legend">
+      <span><i class="swatch d-book"></i>Chữ trong sách truy được về lời giảng</span>
+      <span><i class="swatch d-talk"></i>Lời giảng còn lại trong sách</span>
+      <span><i class="swatch" style="background:var(--noise);border-radius:2px"></i>Vùng nhiễu, mức trùng ngẫu nhiên khoảng 10%</span>
+    </div>
+    <div class="tier">Mức 1. Gỡ băng và làm sạch</div>
+    <div class="row"><span>Hiểu Về Bản Ngã</span><div class="track"><i class="link" style="left:84%;width:9%"></i><i class="dot d-talk" style="left:84%"></i><i class="dot d-book" style="left:93%"></i></div></div>
+    <div class="row"><span>Đệ Tử Phật Hướng Về Vô Ngã</span><div class="track"><i class="link" style="left:70%;width:21%"></i><i class="dot d-talk" style="left:70%"></i><i class="dot d-book" style="left:91%"></i></div></div>
+    <div class="row"><span>Tứ Vô Lượng Tâm</span><div class="track"><i class="link" style="left:70%;width:15%"></i><i class="dot d-talk" style="left:70%"></i><i class="dot d-book" style="left:85%"></i></div></div>
+    <div class="row"><span>Tâm Vô Ngã</span><div class="track"><i class="link" style="left:75%;width:6%"></i><i class="dot d-talk" style="left:75%"></i><i class="dot d-book" style="left:81%"></i></div></div>
+    <div class="row"><span>Khi Người Giàu Tu Thiền</span><div class="track"><i class="link" style="left:67%;width:11%"></i><i class="dot d-talk" style="left:67%"></i><i class="dot d-book" style="left:78%"></i></div></div>
+    <div class="row"><span>Đạo Phật và Xã Hội (trung vị 27 bài)</span><div class="track"><i class="link" style="left:69%;width:9%"></i><i class="dot d-talk" style="left:69%"></i><i class="dot d-book" style="left:78%"></i></div></div>
+    <div class="tier">Mức 2. Biên tập nén, viết lại theo câu</div>
+    <div class="row"><span>Những Chặng Đường Thiền</span><div class="track"><i class="link" style="left:44%;width:17%"></i><i class="dot d-talk" style="left:44%"></i><i class="dot d-book" style="left:61%"></i></div></div>
+    <div class="row"><span>Tứ Thánh Đế (trung vị 12 chương)</span><div class="track"><i class="link" style="left:17%;width:28%"></i><i class="dot d-talk" style="left:17%"></i><i class="dot d-book" style="left:45%"></i></div></div>
+    <div class="row"><span>Hơi Thở Nhiệm Mầu</span><div class="track"><i class="link" style="left:28%;width:14%"></i><i class="dot d-talk" style="left:28%"></i><i class="dot d-book" style="left:42%"></i></div></div>
+    <div class="row"><span>Tứ Niệm Xứ (trung vị 5 phần)</span><div class="track"><i class="link" style="left:29%;width:12%"></i><i class="dot d-talk" style="left:29%"></i><i class="dot d-book" style="left:41%"></i></div></div>
+    <div class="row"><span>Tâm Lý Đạo Đức (trung vị 30 bài)</span><div class="track"><i class="link" style="left:18%;width:14%"></i><i class="dot d-talk" style="left:18%"></i><i class="dot d-book" style="left:32%"></i></div></div>
+    <div class="row"><span>Kinh Nikaya (trung vị 10 bài)</span><div class="track"><i class="link" style="left:21%;width:8%"></i><i class="dot d-talk" style="left:21%"></i><i class="dot d-book" style="left:29%"></i></div></div>
+    <div class="tier">Mức 3. Tái cấu trúc, bổ sung lớn</div>
+    <div class="row"><span>Nhân Quả Công Bằng</span><div class="track"><i class="link" style="left:28%;width:8%"></i><i class="dot d-talk" style="left:28%"></i><i class="dot d-book" style="left:36%"></i></div></div>
+    <div class="row"><span>Nhìn Vào Vũ Trụ</span><div class="track"><i class="link" style="left:23%;width:5%"></i><i class="dot d-talk" style="left:23%"></i><i class="dot d-book" style="left:28%"></i></div></div>
+    <div class="row"><span>Khoa Học Về Thiền Định</span><div class="track"><i class="link" style="left:13%;width:8%"></i><i class="dot d-talk" style="left:13%"></i><i class="dot d-book" style="left:21%"></i></div></div>
+    <div class="axis" style="margin-top:6px"><div></div><div><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div></div>
+  </div>
+  <p class="note">Sách tốt nhất đạt 93% dù phụ đề tự động có lỗi, nên phần nhiễu do phụ đề chỉ khoảng 7%. Những khoảng cách lớn hơn thế phản ánh biên tập thật. Chữ của Những Chặng Đường Thiền đọc bằng OCR nên số thực có thể cao hơn đôi chút. Trong từng bộ, các bài chênh nhau khá nhiều: Tâm Lý Đạo Đức đi từ 10% (bài 9) đến 51% (bài 10), Tứ Thánh Đế từ 27% (Đạo Đế) đến 59% (Chánh Định), Đạo Phật và Xã Hội từ 62% đến 84%.</p>
+</section>
+
+<section>
+  <h2>Ba mức biên tập</h2>
+  <div class="ex">
+    <h3>Mức 1. Gỡ băng và làm sạch</h3>
+    <p>Giữ gần như từng câu, kể cả xưng "tôi", "thầy", câu hỏi tu từ và một phần lời đối đáp. Công việc chính là bỏ từ đệm, bỏ phần chào hỏi và phần trao đổi với thính chúng. Riêng các file .doc của Tâm Vô Ngã, Hiểu Về Bản Ngã và Đệ Tử Phật còn lỗi gõ ("mộ Đấng Giác Ngộ", "họăc"), nên nhiều khả năng đây là bản gỡ băng chưa qua khâu hoàn thiện, chưa phải bản in cuối.</p>
+    <div class="diff">những <del>cái</del> lạc thú <del>đó</del> nó đến <del>cái</del> đỉnh cao cùng cực của nó là bắt đầu ma túy có những <del>cái</del> loại ma túy mà khi người ta sử dụng nó gây nên những <del>cái</del> khoái cảm cực độ<br><span class="note">Hiểu Về Bản Ngã, so từng từ. Gạch ngang là phần bị bỏ.</span></div>
+  </div>
+  <div class="ex">
+    <h3>Mức 2. Biên tập nén, viết lại theo câu</h3>
+    <p>Giữ mạch ý và thứ tự, nhưng viết lại câu sang văn viết và rút còn 22–77% độ dài bài giảng (Tứ Thánh Đế nén mạnh nhất, trung vị 33%). Các đoạn lặp được gộp, và người đọc được dắt đi bằng các câu chuyển ý mới.</p>
+    <div class="pair">
+      <div class="t"><small>Lời giảng (phụ đề)</small>Mà cái đời sống vị tha đó nó cũng chính là đạo đức phải không? […] 10 bài này thì chưa đủ đâu. Nhưng vì tôi nghĩ đây là kết thúc hạ cho nên tôi đưa bài này vào hơi sớm […] Thì đó là cái kết của một đời sống đạo đức</div>
+      <div class="b"><small>Sách</small>Đời sống vị tha cũng chính là kết tinh của một đời sống Đạo đức. Chúng ta đã học rất nhiều về Đạo đức.</div>
+    </div>
+    <p class="note">Tâm Lý Đạo Đức, bài 10. Bối cảnh "kết thúc hạ" biến mất, và "cái kết" được nâng thành "kết tinh".</p>
+  </div>
+  <div class="ex">
+    <h3>Riêng Kinh Nikaya: tách kinh văn khỏi lời giảng</h3>
+    <p>Mười bài Nikaya có một kiểu biên tập riêng, xếp vào Mức 2 nhưng cấu trúc khác. Trong lời giảng, Sư Phụ đọc từng đoạn kinh rồi giảng xen vào. Trong sách, kinh văn hoặc phần tóm tắt được gom thành một mục ("Kinh văn", "Nguyên văn bài kinh", "Tích truyện"), còn lời giảng được viết lại thành các phần có tiêu đề riêng như "Thiện và ác không cố định". Vì vậy thứ tự giữ thấp hơn các bộ khác (trung vị 82%).</p>
+    <p>Số liệu cho thấy rõ hai lớp này: mục kinh văn có 43–61% chữ khớp lời giảng, vì Sư Phụ đọc gần như nguyên văn, còn phần giảng giải chỉ 10–33%. Sách còn thêm phần mở đầu "Những nét tổng quan" cho biết bài kinh thuộc bộ nào. Bài Đoạn Tận Ái in kèm trọn bài Kinh Hạnh Người Xuất Gia thể thơ năm chữ. Ghi chú trao đổi trong file Phẩm Hoa cho thấy người biên tập có đối chiếu với bản kinh gốc và nêu các chỗ lời giảng khác với kinh để hỏi lại.</p>
+    <div class="pair">
+      <div class="t"><small>Lời giảng (phụ đề)</small>tên nó nghe nó cũng rùng rợn giờ chúng ta nghe qua kinh văn chút xíu […] có tên cướp tên là Angolimala một thợ săn tay vấy máu sát hại bảo tàng không có lòng từ mẫn đối với chúng sinh</div>
+      <div class="b"><small>Sách, mục Kinh văn</small>Lúc bấy giờ, trong lãnh thổ của quốc vương Pasenadi, nước Kosala, có tên cướp Angulimala một thợ săn, tay vấy máu, sát hại, bạo tàn, không có lòng từ mẫn đối với chúng sanh.</div>
+    </div>
+    <p class="note">Kinh Angulimala. Sách chỉnh theo bản kinh: thêm địa danh, sửa tên riêng và lời đọc bị rút gọn.</p>
+  </div>
+  <div class="ex">
+    <h3>Mức 3. Tái cấu trúc, bổ sung lớn</h3>
+    <p>Sách có bố cục riêng, không còn đi theo một bài giảng. Nhân Quả Công Bằng là ví dụ rõ nhất: 12 phần lấy xen kẽ từ ba buổi giảng, chỉ 51% ý nằm theo thứ tự gốc. Phần XI về "tội phước trong thời đại mới" không khớp quá 3% với bất kỳ bài nào trong kho 2.125 transcript. Nhìn Vào Vũ Trụ thêm 15 ảnh, 12 đường link nguồn và nhiều tư liệu về thiên văn, UFO, tái sinh. Khoa Học Về Thiền Định có mục 10 hướng dẫn 5 bước thực hành chi tiết, không khớp quá 5% với bài nào trong kho; khoảng hai phần ba đoạn sách khớp ý với video.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Danh mục các thay đổi</h2>
+
+  <div class="ex">
+    <h3>1. Chuyển khẩu ngữ thành văn viết</h3>
+    <p>Đây là thay đổi lớn và đều nhất. Từ "cái" là dấu vân tay của lời nói Sư Phụ: 29–42 lần mỗi 1.000 từ. Ở Mức 1 nó còn khá nhiều, còn ở nhóm biên tập sâu gần như biến mất.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Số lần mỗi 1.000 từ<br>(giảng → sách)</th><th class="n">Mức 1, sách nhỏ</th><th class="n">Đạo Phật và Xã Hội</th><th class="n">Tứ Niệm Xứ, Chặng Đường</th><th class="n">Tứ Thánh Đế</th><th class="n">Tâm Lý Đạo Đức</th><th class="n">Kinh Nikaya</th><th class="n">Mức 3</th></tr></thead>
+      <tbody>
+        <tr><td>cái</td><td class="n">42,5 → 30,6</td><td class="n">28,6 → 11,1</td><td class="n">36,1 → 4,8</td><td class="n">31,2 → 2,3</td><td class="n">36,9 → 2,4</td><td class="n">32,1 → 1,9</td><td class="n">31,0 → 3,4</td></tr>
+        <tr><td>nó</td><td class="n">12,5 → 10,0</td><td class="n">9,7 → 5,4</td><td class="n">11,2 → 1,3</td><td class="n">7,6 → 0,2</td><td class="n">11,8 → 0,7</td><td class="n">11,5 → 1,5</td><td class="n">14,5 → 2,8</td></tr>
+        <tr><td>mà</td><td class="n">18,4 → 15,6</td><td class="n">18,6 → 11,6</td><td class="n">17,0 → 6,4</td><td class="n">18,7 → 6,9</td><td class="n">19,1 → 4,1</td><td class="n">17,9 → 4,3</td><td class="n">19,2 → 5,6</td></tr>
+        <tr><td>ạ, á, à</td><td class="n">3,3 → 0,5</td><td class="n">1,7 → 0,4</td><td class="n">3,3 → 0</td><td class="n">4,2 → 0,1</td><td class="n">2,8 → 0,1</td><td class="n">3,1 → 0</td><td class="n">3,1 → 0</td></tr>
+        <tr><td>phải không</td><td class="n">1,2 → 1,5</td><td class="n">1,0 → 0,8</td><td class="n">0,6 → 0</td><td class="n">1,8 → 0</td><td class="n">1,2 → 0</td><td class="n">1,2 → 0</td><td class="n">1,0 → 0</td></tr>
+        <tr><td>tới (đổi sang "đến")</td><td class="n">2,5 → 2,3</td><td class="n">2,3 → 2,1</td><td class="n">3,3 → 2,5</td><td class="n">2,6 → 0,2</td><td class="n">2,1 → 0,3</td><td class="n">2,3 → 0,7</td><td class="n">2,4 → 1,0</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">Các cặp đổi từ hay gặp nhất: mình → chúng ta, ta; tới → đến; cái → sự, điều, việc, nỗi; coi → xem; vô → vào; ổng → ông; số viết bằng chữ → chữ số.</p>
+  </div>
+
+  <div class="ex">
+    <h3>2. Đổi người nói: từ "tôi, thầy, mình" thành "chúng ta"</h3>
+    <p>Ở Tâm Lý Đạo Đức, "tôi" giảm từ 9,0 xuống 0,5 và "chúng ta" tăng từ 5,3 lên 17,2 mỗi 1.000 từ. Ở Tứ Thánh Đế, "mình" giảm từ 24,5 xuống 3,5. "Sư phụ" không còn xuất hiện trong sách. Sách vì thế đọc như một luận giải, không còn là một vị thầy đang nói với học trò.</p>
+  </div>
+
+  <div class="ex">
+    <h3>3. Bỏ đối đáp với thính chúng</h3>
+    <p>Phần bị cắt mạnh nhất: "giơ tay lên", "thuộc chưa", "vỗ tay", mời người đứng lên nhắc lại, hỏi "any question". Mật độ dấu hỏi là khoảng 7 mỗi 1.000 từ ở các sách nhỏ Mức 1, nhưng chỉ 1–3 ở nhóm biên tập sâu.</p>
+    <div class="pair">
+      <div class="t"><small>Lời giảng (phụ đề)</small>nguyên lý thứ hai nhớ lại giùm thầy […] thuộc như cháo nha […] thuộc chưa ai đứng lên nói đưa cái micro sư phụ dạ con kính thưa sư phụ ạ khi ta thở có ý thức thì có một dòng khí tâm linh […] có ai bổ sung gì không</div>
+      <div class="b"><small>Sách</small>Khi ta thở có ý thức thì một dòng khí siêu nhiên cũng theo vào cơ thể ta. Khác với khí trời, dòng khí siêu nhiên không bị lệ thuộc bởi hạn chế của buồng phổi […]</div>
+    </div>
+    <p class="note">Hơi Thở Nhiệm Mầu. Trong lời giảng, nguyên lý được nói đi nói lại ba lần và học trò trả bài. Trong sách chỉ còn một câu định nghĩa.</p>
+  </div>
+
+  <div class="ex">
+    <h3>4. Bỏ chuyện tự kể và bối cảnh buổi giảng</h3>
+    <p>Lược bớt nhiều kỷ niệm riêng: hồi nhỏ thích bị bệnh để được uống xá xị, đi ăn cắp xoài với người chị, sợ ma không dám ra sau nhà, những lần được Hòa thượng quở trách. Cũng bỏ lời chào, chuyện trời mưa, chỗ ngồi chật, khóa hạ sắp hết.</p>
+  </div>
+
+  <div class="ex">
+    <h3>5. Bỏ câu đùa và ví dụ gắn với thời điểm</h3>
+    <div class="pair">
+      <div class="t"><small>Lời giảng (phụ đề)</small>nó bằng Zero ạ […] thì có nổ Niết gì không nó không có nổ mình nổ thôi chứ vũ trụ không nổ gì hết hết chỉ có mình là nổ tối ngày thôi</div>
+      <div class="b"><small>Sách</small>[…] càng gần chừng nào thì càng chậm chừng nấy, và ở gần sát nhau thì vận tốc là zero. Vũ trụ còn chứa nhiều bí ẩn mà chúng ta chưa biết […]</div>
+    </div>
+    <p class="note">Nhìn Vào Vũ Trụ. Lập luận về Big Bang còn nguyên, câu đùa chơi chữ "nổ" mất. Tương tự, lời khuyên dí dỏm "muốn biết kẻ thù thì soi gương" và chuyện xe Trung Quốc gây kẹt đường ở Tứ Thánh Đế đều bị bỏ.</p>
+  </div>
+
+  <div class="ex">
+    <h3>6. Thêm khung sách</h3>
+    <p>Mục lục, lời ngỏ, tiêu đề, đánh số nhiều cấp. Tứ Niệm Xứ có khoảng 180 dòng tiêu đề, ví dụ "3.6. Chính mình là một điểm không rõ ràng nằm dưới bụng và ngực", trong khi các file Mức 1 chỉ có vài tiêu đề. Câu chuyện thiền sư được trình bày thành đối thoại xuống dòng, như chuyện Mã Tổ và Thạch Củng.</p>
+  </div>
+
+  <div class="ex">
+    <h3>7. Thêm và chỉnh dữ kiện</h3>
+    <p>Đây là can thiệp sâu nhất về mặt nội dung, vì sách đưa vào thông tin không có trong lời giảng. Có chỗ dữ kiện trong sách còn khác lời giảng.</p>
+    <div class="pair">
+      <div class="t"><small>Lời giảng (phụ đề)</small>Giống như trong miền Nam có ông đại lực sĩ […] ổng đang đứng trên đường cái xe nó đụng ổng cái ổ gãy chân rồi cuối đời đi cà nhắc</div>
+      <div class="b"><small>Sách</small>Giống như võ sư đại lực sĩ Hà Châu […] chưởng môn của môn phái Thiếu Lâm Hồng gia […] tại Ý năm 1991 […] gọi ông là "ummo" […] một đêm năm 1993 […] say bí tỉ […] chiếc xe tải đã cán bẹp chiếc xe cà tàng của ông […] đã mất một nửa bàn chân</div>
+    </div>
+    <p class="note">Hơi Thở Nhiệm Mầu. Sách thêm tên, năm, địa điểm và đổi tình tiết tai nạn. Tên "Hà Châu" không có trong phụ đề. Ở Nhìn Vào Vũ Trụ cũng vậy: lời giảng chỉ nhắc chung về đĩa bay, sách thêm sự kiện California năm 1896, thiên hà NGC 6872 kèm link nguồn.</p>
+  </div>
+
+  <div class="ex">
+    <h3>8. Lược một vài chi tiết cụ thể</h3>
+    <p>Ở Tứ Thánh Đế, đoạn về Đức Đạt Lai Lạt Ma (5 lần nhắc ở một video, không còn trong toàn bộ sách) và đoạn về các hội kín trụy lạc (8 lần, không còn trong sách) đã bị bỏ. Ở Tâm Lý Đạo Đức bài 10, sách giữ cách nói "theo quan niệm của người Á Đông, người nữ nặng nghiệp hơn", nhưng bỏ câu Sư Phụ nói thêm là "tôi cũng ít có tin người nữ nặng nghiệp lắm". Bài 8 của cùng sách vẫn nói thẳng đây là quan niệm không đúng, nên ý chung không bị đổi, chỉ mất giọng cá nhân tại chỗ đó.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Sách ưu tiên giữ loại nội dung nào</h2>
+  <p>Tôi đếm các từ khóa theo chủ đề trong lời giảng, rồi xem câu chứa từ khóa đó còn lại trong sách hay không. So với mức giữ chung của nhóm, sẽ thấy người biên tập nghiêng về phía nào.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Loại nội dung</th><th class="n">Mức 1 (chung 67%)</th><th class="n">Biên tập sâu (chung 20%)</th><th>Đọc kết quả</th></tr></thead>
+    <tbody>
+      <tr><td>Khoa học</td><td class="n">91%</td><td class="n">34%</td><td>Giữ nhiều nhất</td></tr>
+      <tr><td>Dẫn kinh, lời Phật dạy</td><td class="n">78%</td><td class="n">28%</td><td>Giữ nhiều</td></tr>
+      <tr><td>Tông phái, tăng sĩ</td><td class="n">77%</td><td class="n">21%</td><td>Ngang mức chung ở nhóm sâu</td></tr>
+      <tr><td>Tôn giáo bạn</td><td class="n">79%</td><td class="n">20%</td><td>Ngang mức chung ở nhóm sâu</td></tr>
+      <tr><td>Giới tính, tình dục</td><td class="n">79%</td><td class="n">18%</td><td>Gần mức chung</td></tr>
+      <tr><td>Tiền, cúng dường</td><td class="n">71%</td><td class="n">15%</td><td>Hơi thấp</td></tr>
+      <tr><td>Chính trị, quốc gia</td><td class="n">69%</td><td class="n">12%</td><td>Thấp ở nhóm sâu</td></tr>
+      <tr><td>Chuyện, ví dụ</td><td class="n">69%</td><td class="n">10%</td><td>Thấp, thường được kể lại bằng lời khác</td></tr>
+      <tr><td>Đối đáp với đại chúng</td><td class="n">60%</td><td class="n">4%</td><td>Cắt mạnh</td></tr>
+      <tr><td>Tự kể</td><td class="n">54%</td><td class="n">3%</td><td>Cắt mạnh nhất</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Bảng này chỉ là chỉ báo. Đoạn được viết lại vẫn bị tính là "không giữ", và từ khóa có nhiễu, nên chỉ nên đọc các chênh lệch lớn. Nội dung chính trị được giữ thấp hơn mức chung, nhưng số liệu này chưa đủ để kết luận đó là chủ trương.</p>
+
+  <h3>Những gì tôi kiểm tra và thấy không bị làm nhẹ</h3>
+  <ul>
+    <li><strong>Cõi Tịnh Độ là cõi tạm:</strong> sách vẫn giữ, và còn nói rõ hơn lời giảng ("cõi Tịnh Độ Cực Lạc của Phật A Di Đà cũng là cõi tạm").</li>
+    <li><strong>Thân hình người nữ "luôn là gợi dục":</strong> sách giữ gần nguyên câu.</li>
+    <li><strong>Phật vượt trên chư Tổ:</strong> sách giữ ý, chỉ bỏ phần Sư Phụ kể lại chuyện mình từng băn khoăn khi đọc kinh và luận.</li>
+    <li><strong>Phản bác Big Bang:</strong> sách giữ nguyên lập luận.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Số liệu từng sách</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Sách</th><th class="n">Từ, giảng → sách</th><th class="n">Sách so với giảng</th><th class="n">Đoạn sách khớp ý</th><th class="n">Đoạn giảng còn ý trong sách</th><th class="n">Giữ thứ tự</th></tr></thead>
+    <tbody>
+      <tr><td>Hiểu Về Bản Ngã</td><td class="n">13.780 → 12.089</td><td class="n">88%</td><td class="n">100%</td><td class="n">97%</td><td class="n">100%</td></tr>
+      <tr><td>Tâm Vô Ngã</td><td class="n">15.275 → 13.961</td><td class="n">91%</td><td class="n">100%</td><td class="n">98%</td><td class="n">100%</td></tr>
+      <tr><td>Đệ Tử Phật Hướng Về Vô Ngã</td><td class="n">15.100 → 11.412</td><td class="n">76%</td><td class="n">100%</td><td class="n">84%</td><td class="n">100%</td></tr>
+      <tr><td>Tứ Vô Lượng Tâm</td><td class="n">13.744 → 11.205</td><td class="n">82%</td><td class="n">100%</td><td class="n">96%</td><td class="n">99%</td></tr>
+      <tr><td>Khi Người Giàu Tu Thiền</td><td class="n">9.649 → 8.118</td><td class="n">84%</td><td class="n">100%</td><td class="n">100%</td><td class="n">99%</td></tr>
+      <tr><td>Đạo Phật và Xã Hội (27 bài, 30 buổi giảng)</td><td class="n">mỗi buổi 16–20 nghìn → 12–17 nghìn</td><td class="n">69–94%</td><td class="n">100%</td><td class="n">98%</td><td class="n">100%</td></tr>
+      <tr><td>Những Chặng Đường Thiền</td><td class="n">13.401 → 9.104</td><td class="n">68%</td><td class="n">100%</td><td class="n">87%</td><td class="n">96%</td></tr>
+      <tr><td>Tứ Thánh Đế (12 chương)</td><td class="n">mỗi chương 18–38 nghìn → 4–19 nghìn</td><td class="n">22–58%</td><td class="n">100%</td><td class="n">68%</td><td class="n">99%</td></tr>
+      <tr><td>Tứ Niệm Xứ (phần 1–5)</td><td class="n">70.678 → 45.105</td><td class="n">49–73%</td><td class="n">100%</td><td class="n">96%</td><td class="n">94%</td></tr>
+      <tr><td>Hơi Thở Nhiệm Mầu</td><td class="n">16.276 → 9.937</td><td class="n">61%</td><td class="n">98%</td><td class="n">90%</td><td class="n">85%</td></tr>
+      <tr><td>Tâm Lý Đạo Đức (30 bài)</td><td class="n">mỗi bài 15–19 nghìn → 7–13 nghìn</td><td class="n">42–77%</td><td class="n">99%</td><td class="n">82%</td><td class="n">95%</td></tr>
+      <tr><td>Kinh Nikaya (10 bài)</td><td class="n">mỗi bài 12–33 nghìn → 8–22 nghìn</td><td class="n">49–101%</td><td class="n">92%</td><td class="n">81%</td><td class="n">82%</td></tr>
+      <tr><td>Nhân Quả Công Bằng (3 buổi giảng)</td><td class="n">53.270 → 34.664</td><td class="n">65%</td><td class="n">87%</td><td class="n">84%</td><td class="n">51%</td></tr>
+      <tr><td>Nhìn Vào Vũ Trụ</td><td class="n">24.064 → 18.699</td><td class="n">78%</td><td class="n">90%</td><td class="n">97%</td><td class="n">87%</td></tr>
+      <tr><td>Khoa Học Về Thiền Định</td><td class="n">17.754 → 10.182</td><td class="n">57%</td><td class="n">67%</td><td class="n">61%</td><td class="n">95%</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Số từ của các sách song ngữ chỉ tính phần tiếng Việt. Khớp ý đo bằng độ tương đồng từ vựng theo từng đoạn 120 từ, với ngưỡng lấy từ các bài giảng không liên quan. Thứ tự chỉ xét trên các đoạn đã khớp. Với các bộ nhiều bài, số khớp ý và thứ tự là trung vị.</p>
+<div class="ex"><h3>Chi tiết từng bài</h3><details><summary>Tâm Lý Đạo Đức, 30 bài</summary><div class="scroll"><table><thead><tr><th>Bài</th><th class="n">Chữ sách có trong giảng</th><th class="n">Lời giảng còn lại</th><th class="n">Sách so với giảng</th><th class="n">Khớp ý</th></tr></thead><tbody><tr><td>1. Khái niệm</td><td class="n">17%</td><td class="n">10%</td><td class="n">56%</td><td class="n">78%</td></tr><tr><td>2. Hiểu và tôn kính Phật</td><td class="n">15%</td><td class="n">12%</td><td class="n">69%</td><td class="n">53%</td></tr><tr><td>3. Tâm từ</td><td class="n">18%</td><td class="n">12%</td><td class="n">61%</td><td class="n">90%</td></tr><tr><td>4. Khiêm hạ</td><td class="n">12%</td><td class="n">9%</td><td class="n">66%</td><td class="n">78%</td></tr><tr><td>5. Chỉ trích và chỉ lỗi</td><td class="n">39%</td><td class="n">22%</td><td class="n">53%</td><td class="n">100%</td></tr><tr><td>6. Nóng nảy</td><td class="n">27%</td><td class="n">15%</td><td class="n">53%</td><td class="n">100%</td></tr><tr><td>7. Hạnh chân thật</td><td class="n">31%</td><td class="n">18%</td><td class="n">58%</td><td class="n">100%</td></tr><tr><td>8. Bình đẳng</td><td class="n">32%</td><td class="n">17%</td><td class="n">50%</td><td class="n">100%</td></tr><tr><td>9. Nhẫn nhục</td><td class="n">10%</td><td class="n">6%</td><td class="n">57%</td><td class="n">57%</td></tr><tr><td>10. Cuộc sống vị tha</td><td class="n">51%</td><td class="n">25%</td><td class="n">48%</td><td class="n">100%</td></tr><tr><td>11. Sống đơn giản</td><td class="n">25%</td><td class="n">14%</td><td class="n">54%</td><td class="n">100%</td></tr><tr><td>12. Tinh tấn</td><td class="n">33%</td><td class="n">17%</td><td class="n">52%</td><td class="n">97%</td></tr><tr><td>13. Đố kỵ</td><td class="n">30%</td><td class="n">16%</td><td class="n">55%</td><td class="n">99%</td></tr><tr><td>14. Giải thoát để làm gì</td><td class="n">36%</td><td class="n">20%</td><td class="n">54%</td><td class="n">98%</td></tr><tr><td>15. Niềm tin</td><td class="n">28%</td><td class="n">21%</td><td class="n">77%</td><td class="n">97%</td></tr><tr><td>16. Sự hòa hợp</td><td class="n">36%</td><td class="n">18%</td><td class="n">47%</td><td class="n">100%</td></tr><tr><td>17. Kín đáo</td><td class="n">33%</td><td class="n">18%</td><td class="n">50%</td><td class="n">100%</td></tr><tr><td>18. Làm chủ lời nói</td><td class="n">25%</td><td class="n">13%</td><td class="n">49%</td><td class="n">100%</td></tr><tr><td>19. Hối hận</td><td class="n">32%</td><td class="n">18%</td><td class="n">53%</td><td class="n">100%</td></tr><tr><td>20. Can đảm</td><td class="n">28%</td><td class="n">17%</td><td class="n">58%</td><td class="n">99%</td></tr><tr><td>21. Biết ơn</td><td class="n">40%</td><td class="n">27%</td><td class="n">65%</td><td class="n">99%</td></tr><tr><td>22. Yêu thiên nhiên</td><td class="n">32%</td><td class="n">20%</td><td class="n">60%</td><td class="n">98%</td></tr><tr><td>23. Tận tụy</td><td class="n">35%</td><td class="n">20%</td><td class="n">54%</td><td class="n">100%</td></tr><tr><td>24. Nhường nhịn</td><td class="n">32%</td><td class="n">19%</td><td class="n">58%</td><td class="n">98%</td></tr><tr><td>25. Giữ lời hứa</td><td class="n">33%</td><td class="n">21%</td><td class="n">62%</td><td class="n">100%</td></tr><tr><td>26. Nhu thuận</td><td class="n">35%</td><td class="n">16%</td><td class="n">42%</td><td class="n">98%</td></tr><tr><td>27. Tham ái</td><td class="n">35%</td><td class="n">21%</td><td class="n">58%</td><td class="n">98%</td></tr><tr><td>28. Vượt qua chính mình</td><td class="n">36%</td><td class="n">21%</td><td class="n">57%</td><td class="n">100%</td></tr><tr><td>29. Tự tại</td><td class="n">33%</td><td class="n">20%</td><td class="n">57%</td><td class="n">100%</td></tr><tr><td>30. Tám muôn tế hạnh</td><td class="n">30%</td><td class="n">15%</td><td class="n">48%</td><td class="n">100%</td></tr></tbody></table></div></details>
+<details><summary>Đạo Phật và Xã Hội, 27 bài</summary><div class="scroll"><table><thead><tr><th>Bài</th><th class="n">Chữ sách có trong giảng</th><th class="n">Lời giảng còn lại</th><th class="n">Sách so với giảng</th><th class="n">Khớp ý</th></tr></thead><tbody><tr><td>1. Giáo dục</td><td class="n">73%</td><td class="n">65%</td><td class="n">86%</td><td class="n">100%</td></tr><tr><td>2. Tự do và đạo đức</td><td class="n">71%</td><td class="n">61%</td><td class="n">82%</td><td class="n">100%</td></tr><tr><td>3. Ý nghĩa của hạnh phúc</td><td class="n">65%</td><td class="n">47%</td><td class="n">69%</td><td class="n">100%</td></tr><tr><td>4. Kinh tế</td><td class="n">63%</td><td class="n">54%</td><td class="n">84%</td><td class="n">100%</td></tr><tr><td>5. Tôn giáo</td><td class="n">72%</td><td class="n">66%</td><td class="n">91%</td><td class="n">100%</td></tr><tr><td>6. Ngôn ngữ</td><td class="n">79%</td><td class="n">68%</td><td class="n">82%</td><td class="n">100%</td></tr><tr><td>7. Lễ hội</td><td class="n">81%</td><td class="n">72%</td><td class="n">87%</td><td class="n">100%</td></tr><tr><td>8. Vì lợi ích chung</td><td class="n">64%</td><td class="n">56%</td><td class="n">84%</td><td class="n">100%</td></tr><tr><td>9. Sói</td><td class="n">79%</td><td class="n">70%</td><td class="n">87%</td><td class="n">100%</td></tr><tr><td>10. Chia rẽ</td><td class="n">78%</td><td class="n">69%</td><td class="n">86%</td><td class="n">100%</td></tr><tr><td>11. Tham lam</td><td class="n">77%</td><td class="n">70%</td><td class="n">88%</td><td class="n">100%</td></tr><tr><td>12. Việc làm từ thiện</td><td class="n">76%</td><td class="n">66%</td><td class="n">84%</td><td class="n">100%</td></tr><tr><td>13. Sự thật</td><td class="n">81%</td><td class="n">69%</td><td class="n">84%</td><td class="n">100%</td></tr><tr><td>14. Đất nước quê hương</td><td class="n">81%</td><td class="n">72%</td><td class="n">86%</td><td class="n">100%</td></tr><tr><td>15. Nghệ thuật</td><td class="n">83%</td><td class="n">74%</td><td class="n">87%</td><td class="n">100%</td></tr><tr><td>16. Sức khỏe và bệnh tật</td><td class="n">62%</td><td class="n">50%</td><td class="n">80%</td><td class="n">100%</td></tr><tr><td>17. Ý nghĩa hòa bình</td><td class="n">75%</td><td class="n">64%</td><td class="n">85%</td><td class="n">100%</td></tr><tr><td>18. Sức mạnh và lẽ phải</td><td class="n">82%</td><td class="n">75%</td><td class="n">89%</td><td class="n">100%</td></tr><tr><td>19. Những điều thế giới còn thiếu</td><td class="n">81%</td><td class="n">75%</td><td class="n">91%</td><td class="n">100%</td></tr><tr><td>20. Những bổn phận thiêng liêng</td><td class="n">82%</td><td class="n">72%</td><td class="n">86%</td><td class="n">100%</td></tr><tr><td>21. Những nghịch lý thời đại</td><td class="n">82%</td><td class="n">76%</td><td class="n">91%</td><td class="n">100%</td></tr><tr><td>22. Cô đơn</td><td class="n">80%</td><td class="n">69%</td><td class="n">85%</td><td class="n">100%</td></tr><tr><td>23. Lương tâm</td><td class="n">78%</td><td class="n">67%</td><td class="n">84%</td><td class="n">100%</td></tr><tr><td>24. Giới thứ năm</td><td class="n">78%</td><td class="n">69%</td><td class="n">87%</td><td class="n">100%</td></tr><tr><td>25. Sự xung đột thế giới hôm nay</td><td class="n">67%</td><td class="n">58%</td><td class="n">83%</td><td class="n">100%</td></tr><tr><td>26. Bến lở bến bồi</td><td class="n">84%</td><td class="n">79%</td><td class="n">94%</td><td class="n">100%</td></tr><tr><td>27. Thành kiến</td><td class="n">71%</td><td class="n">60%</td><td class="n">82%</td><td class="n">100%</td></tr></tbody></table></div></details>
+<details><summary>Tứ Thánh Đế, 12 chương</summary><div class="scroll"><table><thead><tr><th>Bài</th><th class="n">Chữ sách có trong giảng</th><th class="n">Lời giảng còn lại</th><th class="n">Sách so với giảng</th><th class="n">Khớp ý</th></tr></thead><tbody><tr><td>Khổ Đế</td><td class="n">38%</td><td class="n">13%</td><td class="n">28%</td><td class="n">100%</td></tr><tr><td>Tập Đế</td><td class="n">42%</td><td class="n">17%</td><td class="n">36%</td><td class="n">100%</td></tr><tr><td>Diệt Đế</td><td class="n">43%</td><td class="n">17%</td><td class="n">36%</td><td class="n">99%</td></tr><tr><td>Đạo Đế</td><td class="n">27%</td><td class="n">10%</td><td class="n">30%</td><td class="n">87%</td></tr><tr><td>Chánh Kiến</td><td class="n">35%</td><td class="n">10%</td><td class="n">22%</td><td class="n">97%</td></tr><tr><td>Chánh Tư Duy</td><td class="n">45%</td><td class="n">22%</td><td class="n">46%</td><td class="n">97%</td></tr><tr><td>Chánh Ngữ</td><td class="n">53%</td><td class="n">19%</td><td class="n">30%</td><td class="n">100%</td></tr><tr><td>Chánh Nghiệp</td><td class="n">48%</td><td class="n">13%</td><td class="n">23%</td><td class="n">100%</td></tr><tr><td>Chánh Mạng</td><td class="n">44%</td><td class="n">16%</td><td class="n">31%</td><td class="n">100%</td></tr><tr><td>Chánh Tinh Tấn</td><td class="n">56%</td><td class="n">30%</td><td class="n">50%</td><td class="n">100%</td></tr><tr><td>Chánh Niệm</td><td class="n">52%</td><td class="n">32%</td><td class="n">58%</td><td class="n">100%</td></tr><tr><td>Chánh Định</td><td class="n">59%</td><td class="n">33%</td><td class="n">50%</td><td class="n">99%</td></tr></tbody></table></div></details>
+<details><summary>Kinh Nikaya, 10 bài</summary><div class="scroll"><table><thead><tr><th>Bài</th><th class="n">Chữ sách có trong giảng</th><th class="n">Lời giảng còn lại</th><th class="n">Sách so với giảng</th><th class="n">Khớp ý</th></tr></thead><tbody><tr><td>Bổn Sanh Losaka Tissa</td><td class="n">25%</td><td class="n">23%</td><td class="n">101%</td><td class="n">71%</td></tr><tr><td>Phẩm Hoa</td><td class="n">35%</td><td class="n">22%</td><td class="n">79%</td><td class="n">99%</td></tr><tr><td>Chớ Có Tin</td><td class="n">26%</td><td class="n">12%</td><td class="n">63%</td><td class="n">83%</td></tr><tr><td>Angulimala</td><td class="n">27%</td><td class="n">19%</td><td class="n">73%</td><td class="n">97%</td></tr><tr><td>Tiểu Kinh Malunkya</td><td class="n">37%</td><td class="n">25%</td><td class="n">74%</td><td class="n">92%</td></tr><tr><td>Mười Kiết Sử</td><td class="n">22%</td><td class="n">12%</td><td class="n">49%</td><td class="n">86%</td></tr><tr><td>Ví Dụ Con Rắn</td><td class="n">33%</td><td class="n">23%</td><td class="n">67%</td><td class="n">92%</td></tr><tr><td>Đoạn Tận Ái</td><td class="n">30%</td><td class="n">21%</td><td class="n">65%</td><td class="n">87%</td></tr><tr><td>Tùy Phiền Não</td><td class="n">38%</td><td class="n">28%</td><td class="n">83%</td><td class="n">95%</td></tr><tr><td>Lời Cảm Hứng</td><td class="n">26%</td><td class="n">15%</td><td class="n">68%</td><td class="n">95%</td></tr></tbody></table></div></details>
+</div>
+</section>
+
+<section>
+  <h2>Giới hạn của phân tích</h2>
+  <ul>
+    <li><strong>Không biết ai đã sửa.</strong> So sánh chỉ cho thấy khác biệt giữa video và sách. Phần "thêm" có thể do người biên tập viết, do Sư Phụ duyệt hoặc viết thêm, hoặc lấy từ một bài giảng khác mà tôi chưa đối chiếu.</li>
+    <li><strong>Không chắc đúng bản gốc.</strong> Mỗi bài được ghép với transcript có nội dung khớp nhất, kiểm bằng phép đo từ ngữ chứ không chỉ theo tên. Một đề tài vẫn có thể đã giảng nhiều lần. Điều này đáng ngờ nhất với Khoa Học Về Thiền Định, vì video nhắc đến thời Covid và cuốn sách có thể dựa trên bài khác; và với các bài Tâm Lý Đạo Đức 1, 2, 4, 9, chỉ 10–17% chữ khớp. Tôi cũng không xác minh được cái nào có trước, nên một số bài giảng có thể nói sau khi sách đã có.</li>
+    <li><strong>Transcript là bản tự động.</strong> Nguồn gồm kho transcript nội bộ 2.125 bài và phụ đề YouTube cho các bài kho chưa có bản đầy đủ. Cả hai đều sai tên riêng và thuật ngữ. Tôi không thống kê các lỗi đó, và các trích dẫn lời giảng ở trên giữ nguyên phụ đề, kể cả lỗi.</li>
+    <li><strong>Phạm vi đối chiếu.</strong> Tâm Lý Đạo Đức đủ 30/30 bài, Đạo Phật và Xã Hội đủ 27/27 bài, Tứ Thánh Đế đủ 12/12 chương, Tứ Niệm Xứ đủ 5 phần có trong sách. Kinh Nikaya mới có 10 bài được chọn, chưa phải toàn bộ các tập.</li>
+    <li><strong>Bản Đạo Phật và Xã Hội đối chiếu</strong> là các file .doc trong thư mục. Tôi đã kiểm 4 bài, trùng hoàn toàn với bản "(formatted)" nên đây chính là văn bản sách, nhưng chưa so với bản in nếu có khác. File .doc "Vì Lợi Ích Chung" bị lặp nội dung hai lần (96% nửa sau trùng nửa đầu), nên số liệu bài này chỉ tính một lần.</li>
+  </ul>
+  <p>Về Tứ Thánh Đế, tôi làm theo lưu ý của bạn và dùng loạt giảng cũ (kênh Minh Triết Việt Nam, đánh số 1–12). Số liệu xác nhận điều đó: khi thử hai video của loạt mới "Bản Tuyên Ngôn Của Phật", mức khớp với sách chỉ 3%, bằng mức nhiễu, so với 8–19% của loạt cũ khi tính trên toàn bộ sách. Bản cập nhật so đủ 12 chương của loạt cũ.</p>
+</section>
+
+<section>
+  <h2>Nguồn bài giảng đã đối chiếu</h2>
+  <details><summary>Xem 100 bài theo từng bộ</summary>
+<p class="note"><strong>Sách đơn:</strong> <a href="https://www.youtube.com/watch?v=5MqVMSXzjQw">Hiểu Về Bản Ngã</a> · <a href="https://www.youtube.com/watch?v=86sNG-5UrNY">Tâm Vô Ngã</a> · <a href="https://www.youtube.com/watch?v=sGwMDCDXtTo">Đệ Tử Phật Hướng Về Vô Ngã</a> · <a href="https://www.youtube.com/watch?v=WKAj3JlvC0s">Tứ Vô Lượng Tâm</a> · <a href="https://www.youtube.com/watch?v=QNZAxSpzuu0">Khi Người Giàu Tu Thiền</a> · <a href="https://www.youtube.com/watch?v=JhSiRS_Tu_M">Những Chặng Đường Thiền</a> · <a href="https://www.youtube.com/watch?v=y-nVHS4dGcY">Hơi Thở Nhiệm Mầu</a> · <a href="https://www.youtube.com/watch?v=x1we85a5f8Q">Nhìn Vào Vũ Trụ</a> · <a href="https://www.youtube.com/watch?v=gb8drSTDQ8Q">Khoa Học Về Thiền Định</a> · <a href="https://www.youtube.com/watch?v=oxiAgfxbbPk">Nhân Quả Công Bằng</a> <a href="https://www.youtube.com/watch?v=Zmtyp6cjXx0">2</a> <a href="https://www.youtube.com/watch?v=_gufAi7Rvsk">3</a></p>
+<p class="note"><strong>Tứ Niệm Xứ:</strong> <a href="https://www.youtube.com/watch?v=wyERinpPPBQ">1</a> · <a href="https://www.youtube.com/watch?v=NWeSoNGTI0g">2</a> · <a href="https://www.youtube.com/watch?v=bNYdoIA-9lU">3</a> · <a href="https://www.youtube.com/watch?v=Vq1SEuMe3fs">4</a> · <a href="https://www.youtube.com/watch?v=kDKqooJkZg4">5</a></p>
+<p class="note"><strong>Tứ Thánh Đế:</strong> <a href="https://www.youtube.com/watch?v=eY51qWc7U8M">Khổ Đế</a> · <a href="https://www.youtube.com/watch?v=s3G5Z5nueyc">Tập Đế</a> · <a href="https://www.youtube.com/watch?v=iXJk-pkjoXo">Diệt Đế</a> · <a href="https://www.youtube.com/watch?v=wIly2vbNwM4">Đạo Đế</a> · <a href="https://www.youtube.com/watch?v=ZgmMcXmroAs">Chánh Kiến</a> · <a href="https://www.youtube.com/watch?v=G-vWcowEZIU">Chánh Tư Duy</a> · <a href="https://www.youtube.com/watch?v=jJFi5RSpJ1Y">Chánh Ngữ</a> · <a href="https://www.youtube.com/watch?v=n1d3FoW4BkU">Chánh Nghiệp</a> <a href="https://www.youtube.com/watch?v=BlmPaO-nrsQ">2</a> · <a href="https://www.youtube.com/watch?v=BlmPaO-nrsQ">Chánh Mạng</a> · <a href="https://www.youtube.com/watch?v=qk9CyJYlvrw">Chánh Tinh Tấn</a> · <a href="https://www.youtube.com/watch?v=PxUQd44hd5g">Chánh Niệm</a> · <a href="https://www.youtube.com/watch?v=tdFrZj_waDM">Chánh Định</a></p>
+<p class="note"><strong>Tâm Lý Đạo Đức:</strong> <a href="https://www.youtube.com/watch?v=qZA0Vensk1Q">1</a> · <a href="https://www.youtube.com/watch?v=xnbfgWcBWM0">2</a> · <a href="https://www.youtube.com/watch?v=Eo5_s9I62To">3</a> · <a href="https://www.youtube.com/watch?v=2dU3ldRLLXg">4</a> · <a href="https://www.youtube.com/watch?v=IOvDGiMQHSc">5</a> · <a href="https://www.youtube.com/watch?v=wkMJQkhrbsU">6</a> · <a href="https://www.youtube.com/watch?v=SrNQJRxrKPI">7</a> · <a href="https://www.youtube.com/watch?v=5thigkjzvVk">8</a> · <a href="https://www.youtube.com/watch?v=IZSwVWWI13o">9</a> · <a href="https://www.youtube.com/watch?v=ouvGOjirNyQ">10</a> · <a href="https://www.youtube.com/watch?v=D9PYMkhxAaU">11</a> · <a href="https://www.youtube.com/watch?v=McZuKz6GkbQ">12</a> · <a href="https://www.youtube.com/watch?v=DNJ5JkZZQCU">13</a> · <a href="https://www.youtube.com/watch?v=8FegGKzsVqU">14</a> · <a href="https://www.youtube.com/watch?v=QZBxVO0SVJs">15</a> · <a href="https://www.youtube.com/watch?v=0fIk8NZa1Nc">16</a> · <a href="https://www.youtube.com/watch?v=1U1PBAlrrJo">17</a> · <a href="https://www.youtube.com/watch?v=MYdG0EBiJ-0">18</a> · <a href="https://www.youtube.com/watch?v=JS1lN1Bcz-s">19</a> · <a href="https://www.youtube.com/watch?v=cWt7QakrOPo">20</a> · <a href="https://www.youtube.com/watch?v=-qdAHFgKD7A">21</a> · <a href="https://www.youtube.com/watch?v=ILPN9yd-a_s">22</a> · <a href="https://www.youtube.com/watch?v=JX9vh9JwDIk">23</a> · <a href="https://www.youtube.com/watch?v=F-29K8WYBAM">24</a> · <a href="https://www.youtube.com/watch?v=_4VDb4KMuck">25</a> · <a href="https://www.youtube.com/watch?v=I05x8RnjVGU">26</a> · <a href="https://www.youtube.com/watch?v=LEsb-EaQFe0">27</a> · <a href="https://www.youtube.com/watch?v=nb1pGO5ZSQA">28</a> · <a href="https://www.youtube.com/watch?v=11MZdP7JCi8">29</a> · <a href="https://www.youtube.com/watch?v=Yl8D3aVO0nI">30</a></p>
+<p class="note"><strong>Đạo Phật và Xã Hội:</strong> <a href="https://www.youtube.com/watch?v=ejc-5rdNOLY">Giáo dục</a> <a href="https://www.youtube.com/watch?v=9qHQrC3L3Qs">2</a> · <a href="https://www.youtube.com/watch?v=4LdpswYohKM">Tự do và đạo đức</a> · <a href="https://www.youtube.com/watch?v=P2qzzvLBds0">Ý nghĩa của hạnh phúc</a> · <a href="https://www.youtube.com/watch?v=PZjhEc_wek0">Kinh tế</a> <a href="https://www.youtube.com/watch?v=g8RCNnRIkHw">2</a> · <a href="https://www.youtube.com/watch?v=c6biRqWn90E">Tôn giáo</a> <a href="https://www.youtube.com/watch?v=coxZkP8C9HM">2</a> · <a href="https://www.youtube.com/watch?v=-pa67_Hv9sM">Ngôn ngữ</a> · <a href="https://www.youtube.com/watch?v=DVP_LEOhtU0">Lễ hội</a> · <a href="https://www.youtube.com/watch?v=TXOAF_lp9js">Vì lợi ích chung</a> · <a href="https://www.youtube.com/watch?v=6gICkA4Eh3s">Sói</a> · <a href="https://www.youtube.com/watch?v=PDvvPzGtvdo">Chia rẽ</a> · <a href="https://www.youtube.com/watch?v=OoY0WKx4KGA">Tham lam</a> · <a href="https://www.youtube.com/watch?v=ChjSBTPZ3Yo">Việc làm từ thiện</a> · <a href="https://www.youtube.com/watch?v=MEAc03d8PkY">Sự thật</a> · <a href="https://www.youtube.com/watch?v=KbBdYSAQ1BY">Đất nước quê hương</a> · <a href="https://www.youtube.com/watch?v=00IueVWxpq8">Nghệ thuật</a> · <a href="https://www.youtube.com/watch?v=hiBr8jh7u6I">Sức khỏe và bệnh tật</a> · <a href="https://www.youtube.com/watch?v=Exg8RolII7Y">Ý nghĩa hòa bình</a> · <a href="https://www.youtube.com/watch?v=p63QIpOjJ5g">Sức mạnh và lẽ phải</a> · <a href="https://www.youtube.com/watch?v=kAvE5n6ZE-c">Những điều thế giới còn thiếu</a> · <a href="https://www.youtube.com/watch?v=2E534McFEK4">Những bổn phận thiêng liêng</a> · <a href="https://www.youtube.com/watch?v=IrSRCQElwU4">Những nghịch lý thời đại</a> · <a href="https://www.youtube.com/watch?v=YC2Iq8g-p-o">Cô đơn</a> · <a href="https://www.youtube.com/watch?v=kbw_7PbI-M0">Lương tâm</a> · <a href="https://www.youtube.com/watch?v=kEXxotv6tfE">Giới thứ năm</a> · <a href="https://www.youtube.com/watch?v=aTgZgMeCT2M">Sự xung đột thế giới hôm nay</a> · <a href="https://www.youtube.com/watch?v=HmDH1IULxOY">Bến lở bến bồi</a> · <a href="https://www.youtube.com/watch?v=Tn0kCIfDDnc">Thành kiến</a></p>
+<p class="note"><strong>Kinh Nikaya:</strong> <a href="https://www.youtube.com/watch?v=ym16RD5skZk">Bổn Sanh Losaka Tissa</a> · <a href="https://www.youtube.com/watch?v=MPAtVmWUkfY">Phẩm Hoa</a> · <a href="https://www.youtube.com/watch?v=FjBozh-RvLs">Chớ Có Tin</a> · <a href="https://www.youtube.com/watch?v=6PKIhJOlox0">Angulimala</a> · <a href="https://www.youtube.com/watch?v=6LMg8LTRQV8">Tiểu Kinh Malunkya</a> · <a href="https://www.youtube.com/watch?v=m5YeIirBXxI">Mười Kiết Sử</a> · <a href="https://www.youtube.com/watch?v=8h6d1VsCSRw">Ví Dụ Con Rắn</a> <a href="https://www.youtube.com/watch?v=Ttt3c7QZl5Q">2</a> · <a href="https://www.youtube.com/watch?v=fg3pETj6O1g">Đoạn Tận Ái</a> · <a href="https://www.youtube.com/watch?v=_ISFOiSkdq8">Tùy Phiền Não</a> · <a href="https://www.youtube.com/watch?v=a5f_Zh_38gU">Lời Cảm Hứng</a></p>
+  </details>
+</section>
+
+</main>
+
+</body>
+</html>
